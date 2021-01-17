@@ -1,9 +1,51 @@
 <script type="text/x-red" data-template-name="otgw">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i>Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <input type="text" id="node-input-name" placeholder="Name"><br>
         <label for="node-input-serialdevice"><i class="icon-tag"></i>Serialdevice</label>
-        <input type="text" id="node-input-serialdevice" placeholder="Serialdevice">
+        <input type="text" id="node-input-serialdevice" placeholder="Serialdevice"><br>
+        <label for="node-input-baudrate"><i class="icon-tag"></i>Baudrate</label>
+        <select id="node-input-baudrate" placeholder="Baudrate">
+            <option value="110">110</option> 
+            <option value="300">300</option> 
+            <option value="1200">1200</option> 
+            <option value="2400">2400</option> 
+            <option value="4800">4800</option> 
+            <option value="9600">9600</option> 
+            <option value="14400">14400</option> 
+            <option value="19200">19200</option> 
+            <option value="38400">38400</option> 
+            <option value="57600">57600</option> 
+            <option value="115200">115200</option> 
+        </select><br>
+        <label for="node-input-dataBits"><i class="icon-tag"></i>Data bits</label>
+        <select id="node-input-dataBits" placeholder="Data bits">
+            <option value="5">5</option> 
+            <option value="6">6</option> 
+            <option value="7">7</option> 
+            <option value="8">8</option> 
+        </select><br>
+        <label for="node-input-stopBits"><i class="icon-tag"></i>Stop bits</label>
+        <select id="node-input-stopBits" placeholder="Stop bits">
+            <option value="1">1</option> 
+            <option value="2">2</option> 
+        </select><br>
+        <label for="node-input-parity"><i class="icon-tag"></i>Parity</label>
+        <select id="node-input-parity" placeholder="Parity">
+            <option value="odd">Odd</option> 
+            <option value="even">Even</option> 
+            <option value="none">None</option> 
+            <option value="mark">Mark</option> 
+            <option value="space">Space</option> 
+        </select><br>
+        <label for="node-input-rtscts"><i class="icon-tag"></i>rtscts</label>
+        <input type="checkbox" id="node-input-rtscts" placeholder="rtscts">
+        <label for="node-input-xon"><i class="icon-tag"></i>xon</label>
+        <input type="checkbox" id="node-input-xon" placeholder="xon">
+        <label for="node-input-xoff"><i class="icon-tag"></i>xoff</label>
+        <input type="checkbox" id="node-input-xoff" placeholder="xoff">
+        <label for="node-input-xany"><i class="icon-tag"></i>xany</label>
+        <input type="checkbox" id="node-input-xany" placeholder="xany">
         <label for="node-input-debug"><i class="icon-tag"></i>Debug</label>
         <input type="checkbox" id="node-input-debug" placeholder="Debug">
     </div>
@@ -19,7 +61,7 @@
                 Results will the send to first output.<BR>
         <b>Outputs</b><br>
                 <ul>
-                    <li>1st output will contains results of input topics 'cmd' and 'data' and for events. The topic will tell what the payload is 'cmd', 'data' or 'event'.</li.>
+                    <li>1st output will contains results of input topics 'cmd' and 'data' and for events and printSummary mode. The topic will tell what the payload is 'cmd', 'data', 'event' or 'printSummary'.</li.>
                     <li>2nd output will contain updates "Gateway to Boiler"  (status == "R")</li.>
                     <li>3rd output will contain updates "From Boiler"  (status == "B")</li.>
                     <li>4th output will contain updates "From thermostat"  (status == "T")</li.>
@@ -36,10 +78,19 @@
         defaults: {
             name: {value: ""},
             serialdevice: {value: "/dev/ttyUSB0"},
+            baudrate: {value: 9600},
+            dataBits: {value: 8},
+            stopBits: {value:1},
+            parity: {value: "none"},
+            rtscts: {value: false},
+            xon: {value: false},
+            xoff: {value: false},
+            xany: {value: false},
             debug: {value: false}
         },
         inputs: 1,
         outputs: 5,
+        outputLabels: ["cmd/data/events", "Gateway to Boiler", "From Boiler", "From Thermostat", "Gateway to Thermostat"],
         label: function () {
             return (this.groupaddr || this.name || "otgw");
         }

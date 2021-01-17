@@ -2,7 +2,7 @@
  * Created by Michel Verbraak (info@1st-setup.nl).
  */
 
-const openthermGatway = require('./openthermgateway.js');
+const openthermGatway = require('@1st-setup/openthermgateway');
 
 module.exports = function (RED) {
 
@@ -28,7 +28,7 @@ module.exports = function (RED) {
         }
 
         this.otgw.on("error", (err) => {
-            this.output({topic:"event", payload:{error:err}});
+            this.output({topic:"event", payload:{error:err.toString()}});
 			node.status({
 				fill: "red",
 				shape: "dot",
@@ -45,21 +45,21 @@ module.exports = function (RED) {
 			});
         });
         
-        this.otgw.on("inError", (err) => {
-            this.output({topic:"event", payload:{inError:err}});
-			node.status({
-				fill: "orange",
-				shape: "dot",
-				text: `InError`
-			});
-        });
+        // this.otgw.on("inError", (err) => {
+        //     this.output({topic:"event", payload:{inError:err}});
+		// 	node.status({
+		// 		fill: "orange",
+		// 		shape: "dot",
+		// 		text: `InError`
+		// 	});
+        // });
         
         this.otgw.on("initialized",() => {
             this.output({topic:"event", payload:{status:"initialized"}});
 			node.status({
 				fill: "green",
 				shape: "dot",
-				text: `Initialized`
+				text: `Initialized | Mode:${node.otgw.mode}`
 			});
         })
         
@@ -71,10 +71,27 @@ module.exports = function (RED) {
 				text: `Connected`
 			});
         })
-        
+
+        this.otgw.on("printSummary",(data) => {
+            this.output({topic:"printSummary", payload:data});
+			node.status({
+				fill: "green",
+				shape: "dot",
+				text: `printSummary | Mode:${node.otgw.mode}`
+			});
+        });
+
         this.otgw.on("otgwData",(data) => {
             let out2, out3, out4, out5;
 
+            try {
+                if (data === undefined || !data.hasOwnProperty("decoded") || !data.decoded.hasOwnProperty("status")) {
+                    return;
+                }
+            }
+            catch(err) {
+                return;
+            }
             /*
                 "R": "Gateway to boiler",
                 "B": "From boiler",
@@ -89,6 +106,11 @@ module.exports = function (RED) {
                 case "A": out5 = {payload: data}; break;
             }
             this.output(null, out2, out3, out4, out5);
+			node.status({
+				fill: "green",
+				shape: "dot",
+				text: `otgwData | Mode:${node.otgw.mode}`
+			});
         })
 
  		/* ===== Node-Red events ===== */
@@ -98,7 +120,12 @@ module.exports = function (RED) {
             switch (msg.topic) {
                 case "cmd": {
                     node.otgw.sendCommand(msg.payload, (err, response) => {
-                        send({topic:"cmd", payload:{err:err, response: response}});
+                        send({topic:"cmd", payload:{err:err, cmd:msg.payload, response: response}});
+                        node.status({
+                            fill: "green",
+                            shape: "dot",
+                            text: `otgwResponse | Mode:${node.otgw.mode}`
+                        });
                         if (done) {
                             done();
                         }

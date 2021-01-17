@@ -14,7 +14,7 @@ Results will the send to first output.
 
 
 **Outputs**
-* 1st output will contains results of input topics 'cmd' and 'data' and for events and printSummary mode. The topic will tell what the payload is 'cmd', 'data', 'event' or 'printSummary'.
+* 1st output will contains results of input topics 'cmd' and 'data' and for events, printSummary mode and otgwErrors. The topic will tell what the payload is 'cmd', 'data', 'event', 'printSummary' or 'otgwError'.
 * 2nd output will contain updates "Gateway to Boiler"  (status == "R")
 * 3rd output will contain updates "From Boiler"  (status == "B")
 * 4th output will contain updates "From thermostat"  (status == "T")

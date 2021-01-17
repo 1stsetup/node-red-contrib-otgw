@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-otgw",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A node for node-red which communicates with the OTGW",
   "main": "cul.js",
   "scripts": {
@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/1stsetup/node-red-contrib-otgw#readme",
   "dependencies": {
-    "@1st-setup/openthermgateway": "0.0.17"
+    "@1st-setup/openthermgateway": "0.0.18"
   }
 }

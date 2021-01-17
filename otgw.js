@@ -81,6 +81,15 @@ module.exports = function (RED) {
 			});
         });
 
+        this.otgw.on("otgwError",(data) => {
+            this.output({topic:"otgwError", payload:data});
+			node.status({
+				fill: "orange",
+				shape: "dot",
+				text: `otgwError | Mode:${node.otgw.mode}`
+			});
+        });
+
         this.otgw.on("otgwData",(data) => {
             let out2, out3, out4, out5;
 

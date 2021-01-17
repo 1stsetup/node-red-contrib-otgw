@@ -1,0 +1,48 @@
+<script type="text/x-red" data-template-name="otgw">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i>Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+        <label for="node-input-serialdevice"><i class="icon-tag"></i>Serialdevice</label>
+        <input type="text" id="node-input-serialdevice" placeholder="Serialdevice">
+        <label for="node-input-debug"><i class="icon-tag"></i>Debug</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="otgw">
+    <p>Use this to connect to an <i href="http://otgw.tclcode.com/index.html">OpenTherm Gateway (OTGW)</i><br/>
+        <b>Configuration</b><br>
+            Specify a name an the serial device to which the OTGW is connected.<BR>
+        <b>Input</b><br>
+                Set topic to 'cmd' to send a command to the OTGW. The payload contains the OTGW command.<BR>
+                Set topic to 'data' to receive full set of latest data.<br>
+                Results will the send to first output.<BR>
+        <b>Outputs</b><br>
+                <ul>
+                    <li>1st output will contains results of input topics 'cmd' and 'data' and for events. The topic will tell what the payload is 'cmd', 'data' or 'event'.</li.>
+                    <li>2nd output will contain updates "Gateway to Boiler"  (status == "R")</li.>
+                    <li>3rd output will contain updates "From Boiler"  (status == "B")</li.>
+                    <li>4th output will contain updates "From thermostat"  (status == "T")</li.>
+                    <li>5th output will contain updates "Gateway to thermostat"  (status == "A")</li.>
+                </ul
+    </p>
+
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('otgw', {
+        category: 'otgw',
+        color: '#ffffff',
+        defaults: {
+            name: {value: ""},
+            serialdevice: {value: "/dev/ttyUSB0"},
+            debug: {value: false}
+        },
+        inputs: 1,
+        outputs: 5,
+        label: function () {
+            return (this.groupaddr || this.name || "otgw");
+        }
+    });
+</script>
+

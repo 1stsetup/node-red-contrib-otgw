@@ -27,5 +27,6 @@
   },
   "homepage": "https://github.com/1stsetup/node-red-contrib-otgw#readme",
   "dependencies": {
+    "@1st-setup/openthermgateway": "latest"
   }
 }
